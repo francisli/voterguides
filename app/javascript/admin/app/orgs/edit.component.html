@@ -1,0 +1,71 @@
+<router-outlet></router-outlet>
+<div [class.d-none]="route.firstChild">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Edit Org</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <vg-spinner *ngIf="!org"></vg-spinner>
+      <vg-orgs-form *ngIf="org" [id]="org.id" [data]="org.attributes">
+      </vg-orgs-form>
+    </div>
+  </div>
+  <div *ngIf="org" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2 class="h3">Voter Guides</h2>
+  </div>
+  <div *ngIf="org" class="row">
+    <div class="col-md-3">
+      <vg-spinner *ngIf="!elections"></vg-spinner>
+      <ol class="list-group" *ngIf="elections">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+          (click)="onSelectElection(election)"
+          [class.active]="election == selectedElection"
+          *ngFor="let election of elections; trackBy: trackById">
+          {{election.attributes.date}}
+          <span>&raquo;</span>
+        </li>
+      </ol>
+    </div>
+    <div class="col-md-9">
+      <vg-spinner *ngIf="!records"></vg-spinner>
+      <div *ngIf="records" class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>Measure</th>
+              <th>Recommendations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of records; trackBy: trackById">
+              <td style="vertical-align: middle;">
+                <a routerLink="/elections/{{selectedElection.id}}/measures/{{record.id}}">{{record.attributes.title}}</a>
+              </td>
+              <td>
+                <div class="text-center">
+                  <ol class="list-group text-left mb-2">
+                    <li class="list-group-item" *ngFor="let pick of record.attributes.picks_attributes; trackBy: trackById">
+                      <a href="#" (click)="onRemovePick(record, pick)">&times;</a>&nbsp;<span *ngIf="record.attributes.metadata.type == 'election'">{{choiceForPick(record, pick).title}}</span>
+                      <span *ngIf="record.attributes.metadata.type == 'measure'">
+                        <span *ngIf="pick.metadata.recommendation">For</span>
+                        <span *ngIf="!pick.metadata.recommendation">Against</span>
+                      </span>
+                    </li>
+                  </ol>
+                  <div *ngIf="showPickForm[record.id]" class="text-left">
+                    <vg-picks-form
+                      [measure]="record" [org]="org"
+                      (onCreate)="onCreatePick(record, $event)"
+                      (onCancel)="showPickForm[record.id] = false">
+                    </vg-picks-form>
+                  </div>
+                  <a *ngIf="!showPickForm[record.id] && (record.attributes.metadata.type == 'election' || record.attributes.picks_attributes.length == 0)" href="#" (click)="showPickForm[record.id] = true; false">Add</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

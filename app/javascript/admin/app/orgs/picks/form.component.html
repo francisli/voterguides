@@ -1,0 +1,19 @@
+<form (submit)="onSubmit()" #record="ngForm">
+  <div *ngIf="measure.attributes.metadata.type == 'election'" class="form-group">
+    <label for="name">Choice</label>
+    <select [(ngModel)]="data.choice_id" class="form-control" id="choiceId" name="choiceId">
+      <option *ngFor="let choice of measure.attributes.choices_attributes" [value]="choice.id">{{choice.title}}</option>
+    </select>
+  </div>
+  <div *ngIf="measure.attributes.metadata.type == 'measure'" class="form-group">
+    <div class="form-check">
+      <input [(ngModel)]="data.metadata.recommendation" class="form-check-input" type="checkbox" id="recommendation" name="recommendation">
+      <label class="form-check-label" for="recommendation">Recommended</label>
+    </div>
+  </div>
+  <vg-spinner *ngIf="loading"></vg-spinner>
+  <div *ngIf="!loading" class="form-group d-flex justify-content-between">
+    <button [disabled]="!record.form.valid" type="submit" class="btn btn-primary">Add</button>
+    <button (click)="onCancelInternal()" class="btn btn-outline-primary">Cancel</button>
+  </div>
+</form>

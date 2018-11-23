@@ -1,0 +1,27 @@
+<div [class.d-none]="route.firstChild">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
+    <h1 class="h2">Orgs</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a routerLink="/orgs/new" class="btn btn-sm btn-outline-secondary">New</a>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records; trackBy: trackById">
+          <td><a routerLink="/orgs/{{record.id}}">{{record.attributes.name}}</a></td>
+          <td><a [href]="record.attributes.metadata.url" target="_blank">{{record.attributes.metadata.url}}</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<router-outlet></router-outlet>

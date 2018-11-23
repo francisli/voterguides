@@ -1,0 +1,16 @@
+<form (submit)="onSubmit()" #record="ngForm">
+  <ngb-alert *ngIf="updated" type="success" [dismissible]="false">
+    This record has been updated!
+  </ngb-alert>
+  <div class="form-group">
+    <label for="date">Election Date</label>
+    <input [(ngModel)]="data.date" class="form-control" type="text" required id="date" name="date" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}">
+  </div>
+  <vg-spinner *ngIf="loading"></vg-spinner>
+  <div *ngIf="!loading" class="form-group d-flex justify-content-between">
+    <button [disabled]="!record.form.valid" type="submit" class="btn btn-primary">
+      <span *ngIf="!id">Create</span>
+      <span *ngIf="id">Update</span>
+    </button>
+  </div>
+</form>

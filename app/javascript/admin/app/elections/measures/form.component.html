@@ -1,0 +1,36 @@
+<form (submit)="onSubmit()" #record="ngForm">
+  <ngb-alert *ngIf="updated" type="success" [dismissible]="false">
+    This record has been updated!
+  </ngb-alert>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input [(ngModel)]="data.title" class="form-control" type="text" required id="title" name="title">
+  </div>
+  <div class="form-group">
+    <label for="type">Type</label>
+    <select [(ngModel)]="data.metadata.type" class="form-control" required id="type" name="type">
+      <option value="election">Election</option>
+      <option value="measure">Measure</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="type">Choices</label>
+    <ul *ngIf="data.choices_attributes.length > 0" [sortablejs]="data.choices_attributes" class="list-group mb-2">
+      <li *ngFor="let choice of data.choices_attributes" class="list-group-item"><a href="#" (click)="onRemoveChoice(choice)">&times;</a>&nbsp;<span [style.text-decoration]="choice['_destroy'] ? 'line-through' : 'none'">{{choice.title}}</span></li>
+    </ul>
+    <form (submit)="onAddChoice()" class="form-inline">
+      <input [(ngModel)]="choice.title" class="form-control mr-2 flex-fill" type="text" required id="choiceTitle" name="choiceTitle">
+      <button
+        [disabled]="choice.title == null || choice.title == ''"
+        type="submit"
+        class="btn btn-primary">Add</button>
+    </form>
+  </div>
+  <vg-spinner *ngIf="loading"></vg-spinner>
+  <div *ngIf="!loading" class="form-group d-flex justify-content-between">
+    <button [disabled]="!record.form.valid" type="submit" class="btn btn-primary">
+      <span *ngIf="!id">Create</span>
+      <span *ngIf="id">Update</span>
+    </button>
+  </div>
+</form>

@@ -1,0 +1,57 @@
+<div class="row">
+  <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+    <div class="sidebar-sticky">
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2 px-2">
+          <vg-spinner *ngIf="!elections"></vg-spinner>
+          <select *ngIf="elections" [ngModel]="selectedElection" (ngModelChange)="onSelectElection($event)" class="form-control" name="selectedElection">
+            <option *ngFor="let election of elections; trackBy: trackById" [ngValue]="election">{{election.attributes.date}}</option>
+          </select>
+        </li>
+        <li *ngIf="elections" class="nav-item px-2">
+          <vg-spinner *ngIf="!orgs"></vg-spinner>
+          <div *ngIf="orgs">
+            <div *ngFor="let org of orgs; trackBy: trackById" class="form-check">
+              <input type="checkbox" [ngModel]="selectedOrgs[org.id]" (ngModelChange)="onSelectOrg(org)" class="form-check-input" [attr.name]="org.id">
+              <label class="form-check-label">{{org.attributes.name}}</label>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <vg-spinner *ngIf="orgs && !rows"></vg-spinner>
+    <div *ngIf="orgs && rows" class="table-container">
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th colspan="2" class="org-col" style="width: auto">
+                <div class="form-check">
+                  <input type="checkbox" [ngModel]="showAll" (ngModelChange)="onToggleShowAll()" class="form-check-input" name="showAll">
+                  <label class="form-check-label">Show all</label>
+                </div>
+              </th>
+              <th *ngFor="let org of selectedOrgsArray(); trackBy: trackById" class="org-col">
+                <div class="org-header">{{org.attributes.name}}</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of rows; trackBy: trackById">
+              <th [attr.colspan]="row[1] ? 1 : 2">
+                {{row[0]?.attributes.title}}
+              </th>
+              <td *ngIf="row[1]; let choice">{{choice.title}}</td>
+              <td *ngFor="let org of selectedOrgsArray(); trackBy: trackById">
+                <div class="recommendation {{recommendation(row[0], row[1], picks[org.id])}}"><span>{{recommendation(row[0], row[1], picks[org.id])}}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

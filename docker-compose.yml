@@ -1,0 +1,28 @@
+version: '2'
+services:
+  db:
+    image: postgres:10
+  redis:
+    image: redis:3.2
+  mailcatcher:
+    image: tikitaki/public:mailcatcher
+    command: /usr/local/bundle/bin/mailcatcher -f --ip 0.0.0.0
+    ports:
+      - '1080:1080'
+  server:
+    build: .
+    command: bash -l -c "rm -f /opt/rails/app/tmp/pids/server.pid; foreman start -f Procfile.development"
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://redis:6379
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+    volumes:
+      - .:/opt/rails/app
+      - /opt/rails/app/node_modules
+    ports:
+      - '3000:3000'
+      - '3035:3035'
+    depends_on:
+      - db
+      - redis
+      - mailcatcher
