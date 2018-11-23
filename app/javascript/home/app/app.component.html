@@ -12,8 +12,8 @@
           <vg-spinner *ngIf="!orgs"></vg-spinner>
           <div *ngIf="orgs">
             <div *ngFor="let org of orgs; trackBy: trackById" class="form-check">
-              <input type="checkbox" [ngModel]="selectedOrgs[org.id]" (ngModelChange)="onSelectOrg(org)" class="form-check-input" [attr.name]="org.id">
-              <label class="form-check-label">{{org.attributes.name}}</label>
+              <input type="checkbox" [ngModel]="selectedOrgs[org.id]" (ngModelChange)="onSelectOrg(org)" class="form-check-input" [attr.name]="org.id" [attr.id]="org.id">
+              <label class="form-check-label" [attr.for]="org.id">{{org.attributes.name}}</label>
             </div>
           </div>
         </li>
