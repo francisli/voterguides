@@ -3,7 +3,13 @@ module Api
     before_action :load_org, only: [:show, :update]
 
     def index
-      @orgs = policy_scope(Org.order(:name))
+      if params[:election_id]
+        @election = Election.find_by(id: params[:election_id])
+        head :not_found and return if @election.nil?
+        @orgs = policy_scope(@election.orgs.order(:name))
+      else
+        @orgs = policy_scope(Org.order(:name))
+      end
       render json: OrgSerializer.new(@orgs)
     end
 
