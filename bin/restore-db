@@ -1,0 +1,2 @@
+#! /bin/sh
+pg_restore --clean --no-acl --no-owner -d $DATABASE_URL $1
