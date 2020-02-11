@@ -12,14 +12,14 @@ class ElectionPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [:date]
+    [:date, :visible]
   end
 
   class Scope < ApplicationPolicy::Scope
     def resolve
       scoped = scope.all
       if !user.try(:admin?)
-        scoped = scoped.where("date <= ?", Time.now.utc)
+        scoped = scoped.where("visible = ?", true)
       end
       scoped
     end
