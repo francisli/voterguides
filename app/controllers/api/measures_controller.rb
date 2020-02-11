@@ -4,6 +4,9 @@ module Api
 
     def index
       @measures = policy_scope(@election.measures).includes(:choices)
+      @measures.each do |measure|
+        measure.association(:choices).target = measure.choices.to_a.sort{|a, b| a.title <=> b.title}
+      end
       render json: MeasureSerializer.new(@measures)
     end
 

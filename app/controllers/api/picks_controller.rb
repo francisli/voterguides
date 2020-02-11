@@ -6,10 +6,14 @@ module Api
     before_action :load_pick, only: [:destroy]
 
     def index
-      @picks = policy_scope(@election.picks.where(picks: {org: @org}))
+      @picks = policy_scope(@election.picks.where(picks: {org: @org}).includes(:choice))
       @measures = policy_scope(@election.measures.includes(:choices))
       @measures.each do |measure|
-        measure.association(:picks).target = @picks.map{ |p| p.measure_id == measure.id ? p : nil }.compact
+        choices = measure.choices.to_a.sort{|a, b| a.title <=> b.title}
+        measure.association(:choices).target = choices
+        picks = @picks.map{ |p| p.measure_id == measure.id ? p : nil }.compact
+        picks = picks.sort{|a, b| a.choice.title <=> b.choice.title} if !choices.empty?
+        measure.association(:picks).target = picks
       end
       render json: MeasureSerializer.new(@measures, {params: {picks: true}})
     end
