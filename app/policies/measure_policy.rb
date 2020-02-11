@@ -11,7 +11,15 @@ class MeasurePolicy < ApplicationPolicy
     create?
   end
 
+  def up?
+    create?
+  end
+
+  def down?
+    create?
+  end
+
   def permitted_attributes
-    [:title, metadata: {}, choices_attributes: [:id, :title, :position, :_destroy, metadata: {}]]
+    [:title, :position, metadata: {}, choices_attributes: [:id, :title, :position, :_destroy, metadata: {}]]
   end
 end

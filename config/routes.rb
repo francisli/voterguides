@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :elections
-    resources :measures
+    resources :measures do
+      patch 'up'
+      patch 'down'
+    end
     resources :orgs
     resources :picks
   end

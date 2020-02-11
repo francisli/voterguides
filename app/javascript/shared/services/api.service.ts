@@ -84,6 +84,12 @@ export class ApiService {
     },
     update: (id: string, data: any): Observable<any> => {
       return this.patch(`/api/measures/${id}`, data);
+    },
+    up: (id: string):  Observable<any> => {
+      return this.patch(`/api/measures/${id}/up`);
+    },
+    down: (id: string):  Observable<any> => {
+      return this.patch(`/api/measures/${id}/down`);
     }
   };
 

@@ -1,6 +1,6 @@
 module Api
   class MeasuresController < ApiController
-    before_action :load_election, except: [:show, :update]
+    before_action :load_election, except: [:show, :update, :up, :down]
 
     def index
       @measures = policy_scope(@election.measures).includes(:choices)
@@ -28,6 +28,18 @@ module Api
       else
         render json: ErrorSerializer.new(@measure), status: :unprocessable_entity
       end
+    end
+
+    def up
+      @measure = authorize Measure.find_by(id: params[:measure_id])
+      @measure.move_higher
+      head :no_content
+    end
+
+    def down
+      @measure = authorize Measure.find_by(id: params[:measure_id])
+      @measure.move_lower
+      head :no_content
     end
 
     def load_election

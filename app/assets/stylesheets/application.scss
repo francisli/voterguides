@@ -1,3 +1,7 @@
 @import 'bootstrap';
 @import 'dashboard';
 @import 'errors';
+
+a[tabindex] {
+  cursor: pointer;
+}

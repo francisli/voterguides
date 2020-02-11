@@ -23,12 +23,17 @@
     <table *ngIf="election && records" class="table table-striped table-sm">
       <thead>
         <tr>
+          <th></th>
           <th>Title</th>
           <th>Choices</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let record of records; trackBy: trackById">
+          <td>
+            <a tabindex="0" (click)="onMeasureUp(record)">&nbsp;&#10514;&nbsp;</a>
+            <a tabindex="0" (click)="onMeasureDown(record)">&nbsp;&#10515;&nbsp;</a>
+          </td>
           <td><a routerLink="measures/{{record.id}}">{{record.attributes.title}}</a></td>
           <td>
             <div *ngFor="let choice of record.attributes.choices_attributes">{{choice.title}}</div>
