@@ -16,7 +16,7 @@
     "angular2-template-loader": "^0.6.2",
     "core-js": "^2.5.7",
     "html-loader": "^0.5.5",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "rxjs": "^6.3.3",
     "sortablejs": "^1.7.0",
     "to-string-loader": "^1.1.5",
